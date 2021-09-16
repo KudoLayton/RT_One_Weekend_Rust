@@ -10,6 +10,7 @@ use std::ops::{
 	Mul,
 	Div
 };
+use std::clone::Clone;
 use std::string::ToString;
 
 pub struct Vec3 {
@@ -35,6 +36,16 @@ impl Vec3 {
 
 	pub fn z(&self) -> f64 {
 		self.e[2]
+	}
+}
+
+impl Clone for Vec3 {
+	fn clone(&self) -> Self {
+		Vec3 { e: self.e.clone() }
+	}
+
+	fn clone_from(&mut self, source: &Self){
+		self.e = source.e.clone();
 	}
 }
 
@@ -111,12 +122,25 @@ impl Vec3 {
 	}
 }
 
-type Point3 = Vec3;
+pub type Point3 = Vec3;
 
 impl ToString for Vec3{
 	fn to_string(&self) -> String{
 		format!("{} {} {} ", self.e[0], self.e[1], self.e[2])
 	}
+}
+
+impl Add for Vec3 {
+    type Output = Vec3;
+    fn add(self, rhs: Vec3) -> Self::Output {
+        Vec3 { 
+            e: [
+                self.e[0] + rhs.e[0],
+                self.e[1] + rhs.e[1],
+                self.e[2] + rhs.e[2]
+                ]
+         }
+    }
 }
 
 impl Add for &Vec3 {
@@ -132,6 +156,19 @@ impl Add for &Vec3 {
     }
 }
 
+impl Sub for Vec3 {
+	type Output = Vec3;
+	fn sub(self, rhs: Vec3) -> Self::Output {
+	    Vec3 {
+		    e: [
+			self.e[0] - rhs.e[0],
+			self.e[1] - rhs.e[1],
+			self.e[2] - rhs.e[2]
+		    ]
+	    }
+	}
+}
+
 impl Sub for &Vec3 {
 	type Output = Vec3;
 	fn sub(self, rhs: &Vec3) -> Self::Output {
@@ -140,6 +177,19 @@ impl Sub for &Vec3 {
 			self.e[0] - rhs.e[0],
 			self.e[1] - rhs.e[1],
 			self.e[2] - rhs.e[2]
+		    ]
+	    }
+	}
+}
+
+impl Mul for Vec3 {
+	type Output = Vec3;
+	fn mul(self, rhs: Vec3) -> Self::Output {
+	    Vec3 {
+		    e: [
+			self.e[0] * rhs.e[0],
+			self.e[1] * rhs.e[1],
+			self.e[2] * rhs.e[2]
 		    ]
 	    }
 	}
@@ -158,6 +208,19 @@ impl Mul for &Vec3 {
 	}
 }
 
+impl Mul<f64> for Vec3 {
+	type Output = Vec3;
+	fn mul(self, rhs: f64) -> Self::Output {
+	    Vec3 {
+		    e: [
+			self.e[0] * rhs,
+			self.e[1] * rhs,
+			self.e[2] * rhs
+		    ]
+	    }
+	}
+}
+
 impl Mul<f64> for &Vec3 {
 	type Output = Vec3;
 	fn mul(self, rhs: f64) -> Self::Output {
@@ -166,6 +229,19 @@ impl Mul<f64> for &Vec3 {
 			self.e[0] * rhs,
 			self.e[1] * rhs,
 			self.e[2] * rhs
+		    ]
+	    }
+	}
+}
+
+impl Div<f64> for Vec3 {
+	type Output = Vec3;
+	fn div(self, rhs: f64) -> Self::Output {
+	    Vec3 {
+		    e: [
+			self.e[0] / rhs,
+			self.e[1] / rhs,
+			self.e[2] / rhs
 		    ]
 	    }
 	}
