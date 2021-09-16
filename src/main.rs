@@ -1,6 +1,9 @@
+extern crate image;
+
 use std::io::Write;
 
-extern crate image;
+mod vec3;
+
 
 fn main() {
 
