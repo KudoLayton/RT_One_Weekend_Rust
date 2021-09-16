@@ -3,7 +3,7 @@ extern crate image;
 use std::io::Write;
 
 mod vec3;
-
+mod color;
 
 fn main() {
 
@@ -19,17 +19,13 @@ fn main() {
         print!("\rScanlines remaining: {} ", j);
         std::io::stdout().flush().unwrap();
         for i in 0..image_width {
-            let r = (i as f64) / ((image_width - 1) as f64);
-            let g = (j as f64) / ((image_width - 1) as f64);
-            let b = 0.25f64;
+            let pixel_color: color::Color = vec3::Vec3::new(
+                (i as f64) / ((image_width - 1) as f64),
+                (j as f64) / ((image_height - 1) as f64),
+                0.25
+            );
 
-            let ir = (255.999 * r) as u8;
-            let ig = (255.999 * g) as u8;
-            let ib = (255.999 * b) as u8;
-
-            image_buffer.push(ir);
-            image_buffer.push(ig);
-            image_buffer.push(ib);
+            color::Color::write_color(&mut image_buffer, pixel_color);
         }
     }
 

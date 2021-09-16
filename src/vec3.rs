@@ -12,14 +12,30 @@ use std::ops::{
 };
 use std::string::ToString;
 
-struct Vec3 {
+pub struct Vec3 {
     e : [f64; 3]
 }
 
-enum ColorIndex {
-	R,
-	G,
-	B
+impl Vec3 {
+	pub fn zero() -> Vec3 {
+		Vec3 {e: [0.0, 0.0, 0.0]}
+	}
+
+	pub fn new(x: f64, y: f64, z: f64) -> Vec3 {
+		Vec3 {e: [x, y, z]}
+	}
+
+	pub fn x(&self) -> f64 {
+		self.e[0]
+	}
+
+	pub fn y(&self) -> f64 {
+		self.e[1]
+	}
+
+	pub fn z(&self) -> f64 {
+		self.e[2]
+	}
 }
 
 impl Neg for &Vec3 {
@@ -32,24 +48,29 @@ impl Neg for &Vec3 {
 		] }
 	}
 }
+enum AxisIndex {
+	X,
+	Y,
+	Z
+}
 
-impl Index<ColorIndex> for Vec3 {
+impl Index<AxisIndex> for Vec3 {
 	type Output = f64;
-	fn index(&self, color: ColorIndex) -> &Self::Output {
+	fn index(&self, color: AxisIndex) -> &Self::Output {
 		match color {
-			ColorIndex::R => &self.e[0],
-			ColorIndex::G => &self.e[1],
-			ColorIndex::B => &self.e[2],
+			AxisIndex::X => &self.e[0],
+			AxisIndex::Y => &self.e[1],
+			AxisIndex::Z => &self.e[2],
 		}
 	}
 }
 
-impl IndexMut<ColorIndex> for Vec3 {
-	fn index_mut(&mut self, color: ColorIndex) -> &mut f64 {
+impl IndexMut<AxisIndex> for Vec3 {
+	fn index_mut(&mut self, color: AxisIndex) -> &mut f64 {
 		match color {
-			ColorIndex::R => &mut self.e[0],
-			ColorIndex::G => &mut self.e[1],
-			ColorIndex::B => &mut self.e[2],
+			AxisIndex::X => &mut self.e[0],
+			AxisIndex::Y => &mut self.e[1],
+			AxisIndex::Z => &mut self.e[2],
 		}
 	}
 }
@@ -91,7 +112,6 @@ impl Vec3 {
 }
 
 type Point3 = Vec3;
-type Color = Vec3;
 
 impl ToString for Vec3{
 	fn to_string(&self) -> String{
@@ -165,13 +185,13 @@ impl Div<f64> for &Vec3 {
 }
 
 impl Vec3 {
-	fn dot(u: &Vec3, v: &Vec3) -> f64 {
+	pub fn dot(u: &Vec3, v: &Vec3) -> f64 {
 		u.e[0] * v.e[0] +
 		u.e[1] * v.e[1] +
 		u.e[2] * v.e[2]
 	}
     
-	fn cross(u: &Vec3, v: &Vec3) -> Vec3 {
+	pub fn cross(u: &Vec3, v: &Vec3) -> Vec3 {
 		Vec3 { e: [
 			u.e[1] * v.e[2] - u.e[2] * v.e[1],
 			u.e[2] * v.e[0] - u.e[0] * v.e[2],
@@ -179,7 +199,7 @@ impl Vec3 {
 		] }
 	}
 
-	fn unit_vector(v: &Self) -> Self {
+	pub fn unit_vector(v: &Self) -> Self {
 		v / v.length()
 	}
 }
