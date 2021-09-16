@@ -1,3 +1,5 @@
+use std::io::Write;
+
 extern crate image;
 
 fn main() {
@@ -11,6 +13,8 @@ fn main() {
     // Render
 
     for j in (0..image_height).rev() {
+        print!("\rScanlines remaining: {} ", j);
+        std::io::stdout().flush().unwrap();
         for i in 0..image_width {
             let r = (i as f64) / ((image_width - 1) as f64);
             let g = (j as f64) / ((image_width - 1) as f64);
@@ -25,6 +29,9 @@ fn main() {
             image_buffer.push(ib);
         }
     }
+
+    println!("\nDone!");
+
     image::save_buffer(
         "image.png", 
         image_buffer.as_slice(), 
